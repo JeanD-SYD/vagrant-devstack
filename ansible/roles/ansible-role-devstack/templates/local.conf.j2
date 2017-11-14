@@ -16,3 +16,33 @@ enable_plugin mariadb https://git.openstack.org/openstack/devstack-plugin-mariad
 #disable_service n-api n-cond n-sch n-novnc n-cauth n-cpu # Disable Nova services
 #disable_service q-svc q-agt q-dhcp q-l3 q-meta # Disable Neutron services
 disable_service tempest # Disable Tempest
+
+# ===== BEGIN localrc =====
+ 
+# Load the external LBaaS plugin.
+enable_plugin neutron-lbaas https://git.openstack.org/openstack/neutron-lbaas
+enable_plugin octavia https://git.openstack.org/openstack/octavia
+ 
+# Enable Logging
+LOGFILE=$DEST/logs/stack.sh.log
+VERBOSE=True
+LOG_COLOR=True
+LOGDAYS=1
+ 
+# Pre-requisite
+ENABLED_SERVICES=rabbit,key
+# Horizon
+ENABLED_SERVICES+=,horizon
+# Nova
+ENABLED_SERVICES+=,n-api,n-cpu,n-cond,n-sch
+# Glance
+ENABLED_SERVICES+=,g-api,g-reg
+# Neutron
+ENABLED_SERVICES+=,q-svc,q-agt,q-dhcp,q-l3,q-meta
+# Enable LBaaS v2
+ENABLED_SERVICES+=,q-lbaasv2
+ENABLED_SERVICES+=,octavia,o-cw,o-hk,o-hm,o-api
+# Cinder
+ENABLED_SERVICES+=,c-api,c-vol,c-sch
+ 
+# ===== END localrc =====
